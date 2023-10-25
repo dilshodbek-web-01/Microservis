@@ -1,0 +1,34 @@
+datasource db {
+    url = env("DATABASE_URL")
+    provider = "postgresql"
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Jobs {
+    id        String    @map("id")         @db.Uuid         @default(uuid())
+    title     String    @map("title")      @db.VarChar(64)
+    createdAt DateTime  @map("created_at") @db.Timestamp(0) @default(now())
+    updatedAt DateTime  @map("updated_at") @db.Timestamp(0) @updatedAt
+    deletedAt DateTime? @map("deleted_at") @db.Timestamp(0)
+
+    employee Employee[]
+
+    @@id([ id ])
+    @@map("jobs")
+}
+
+model Employee {
+    id        String    @map("id")         @db.Uuid         @default(uuid())
+    code      String    @map("code")       @db.VarChar(64) 
+    createdAt DateTime  @map("created_at") @db.Timestamp(0) @default(now())
+    updatedAt DateTime  @map("updated_at") @db.Timestamp(0) @updatedAt
+    deletedAt DateTime? @map("deleted_at") @db.Timestamp(0)
+
+    jobs Jobs[]
+
+    @@id([ id ])
+    @@map("employee")
+}
